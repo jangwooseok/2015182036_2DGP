@@ -5,7 +5,7 @@ open_canvas()
 grass = load_image('grass.png')
 character = load_image('animation_sheet.png')
 
-# 커밋 횟수 5
+# 커밋 횟수 6
 
 frame = 0
 count = 0
