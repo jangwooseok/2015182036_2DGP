@@ -5,9 +5,14 @@ open_canvas()
 grass = load_image('grass.png')
 character = load_image('animation_sheet.png')
 
-# 4
+# 커밋 횟수 5
+
 frame = 0
 count = 0
+
+x_mul = 203
+y_mul = 535
+
 x = []
 y = []
 
@@ -20,29 +25,77 @@ def save_coord():
 
 
 
-def move_charcter():
+def move_character():
     global count
     global frame
+    global x_mul
+    global y_mul
 
     clear_canvas()
-    if(count > 0):
-        if(x[count-1] < x[count]):
-            frame = 100
+
+
+    if(count == 9):
+        frame = 0
+    else:
+        if (x[count] < x[count + 1]):
+            frame = 1
         else:
             frame = 0
 
-    character.clip_draw(frame * 100, 100, 100, 100, x[count], y[count])
+    character.clip_draw(100, frame * 100, 100, 100, x_mul, y_mul)
+
+    if(count == 9):     #9 에서 0으로 갈 때
+        if (x_mul <= x[0] and y_mul >= y[0]):
+            count = 0
+            x_mul = x[count]
+            y_mul = y[count]
+    elif(x[count] < x[count + 1] and y[count] < y[count + 1]):  #++
+        if(x_mul >= x[count + 1] and y_mul >= y[count + 1]):
+            count += 1
+            x_mul = x[count]
+            y_mul = y[count]
+    elif(x[count] < x[count + 1] and y[count] > y[count + 1]):  #+-
+        if (x_mul >= x[count + 1] and y_mul <= y[count + 1]):
+            count += 1
+            x_mul = x[count]
+            y_mul = y[count]
+    elif (x[count] > x[count + 1] and y[count] > y[count + 1]): #--
+        if (x_mul <= x[count + 1] and y_mul <= y[count + 1]):
+            count += 1
+            x_mul = x[count]
+            y_mul = y[count]
+    elif(x[count] > x[count + 1] and y[count] < y[count + 1]):  #-+
+        if (x_mul <= x[count] and y_mul >= y[count]):
+            count += 1
+            x_mul = x[count]
+            y_mul = y[count]
+
+    if count == 9:
+            x_mul -= 1
+            a = (y[count] - y[0]) / (x[count] - x[0])
+
+    else:
+        if (x[count] >= x[count + 1]):
+            x_mul -= 1
+        elif (x[count] < x[count + 1]):
+            x_mul += 1
+
+        a = (y[count] - y[count + 1]) / (x[count] - x[count + 1])
+
+    y_mul = a * x_mul + y[count] - a*x[count] #기울기x + y
+
+
+
     update_canvas()
-    delay(0.05)
+    delay(0.01)
 
 
 
+save_coord()
 while True:
-    save_coord()
-    move_charcter()
-    count += 1
-    if(count == 10):
-        count = 0
+    move_character()
+
+
 
 
     
