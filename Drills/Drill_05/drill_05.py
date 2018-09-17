@@ -5,60 +5,41 @@ open_canvas()
 grass = load_image('grass.png')
 character = load_image('animation_sheet.png')
 
-# 2
-
-count = 0
-x, y = 0, 0
-b_x, b_y = 0, 0
-def save_coord(x, y):
-    if(count == 0):
-        x, y = 203, 535
-    elif(count == 1):
-        b_x, b_y = x, y
-        x, y = 132, 243
-    elif(count == 2):
-        b_x, b_y = x, y
-        x, y = 535, 470
-    elif(count == 3):
-        b_x, b_y = x, y
-        x, y = 477, 203
-    elif(count == 4):
-        b_x, b_y = x, y
-        x, y = 715, 136
-    elif(count == 5):
-        b_x, b_y = x, y
-        x, y = 316, 225
-    elif(count == 6):
-        b_x, b_y = x, y
-        x, y = 510, 92
-    elif(count == 7):
-        b_x, b_y = x, y
-        x, y = 692, 518
-    elif(count == 8):
-        b_x, b_y = x, y
-        x, y = 682, 336
-    elif(count == 9):
-        b_x, b_y = x, y
-        x, y = 712, 349
-
+# 4
 frame = 0
+count = 0
+x = []
+y = []
+
+def save_coord():
+    global x, y
+    x = [203, 132, 535, 477, 715, 316, 510, 692, 682, 712]
+    y = [535, 243, 470, 203, 136, 225, 92, 518, 336, 349]
+
+
+
+
 
 def move_charcter():
+    global count
+    global frame
 
     clear_canvas()
-    if(b_x < x):
-        frame = 100
-    elif(b_x > x):
-        frame = 0
-    character.clip_draw(frame * 100, 100, 100, 100, x, 90)
+    if(count > 0):
+        if(x[count-1] < x[count]):
+            frame = 100
+        else:
+            frame = 0
 
+    character.clip_draw(frame * 100, 100, 100, 100, x[count], y[count])
+    update_canvas()
     delay(0.05)
 
 
 
 while True:
     save_coord()
-    move_charcter(x, y)
+    move_charcter()
     count += 1
     if(count == 10):
         count = 0
